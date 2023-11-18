@@ -18,7 +18,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
         <title>Consulta Mercadoria JBM</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-25..200"/>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-25..200"/>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -871,45 +871,46 @@
 
                 <%
                     ProdutoDAO produtoDAO = new ProdutoDAO();
-
                     List<Produto> listaProdutos = produtoDAO.consultarGeralProduto();
+                    int alturaMaximaTabelaProdutos = 300; // Defina a altura máxima desejada em pixels
 
                     if (listaProdutos != null && !listaProdutos.isEmpty()) {
                 %>
-                <table id="products-table" class="display dataTable" style="width:100%" border="2">
-                    <tr bgcolor="F3F3F3">
-                        <th>Código Interno</th>
-                        <th>Código EAN</th>
-                        <th>Descrição</th>
-                        <th>Preço</th>
-                        <th>Qtd Estoque</th>
-                        <th>Adicionar</th>
-                        <th>Excluir</th>
-                    </tr>
-                    <%
-                        int n_reg = 0;
-                        for (Produto produto : listaProdutos) {
-                    %>
-                    <tr>
-                        <td><%= produto.getCodigo()%></td>
-                        <td><%= produto.getCodigoean()%></td>
-                        <td><%= produto.getDescricao()%></td>
-                        <td><%= formatarDinheiro(produto.getPreco())%></td>
-                        <td><%= produto.getQtd_estoque()%></td>
-                        <td><a href=""><span class="material-symbols-outlined">update</span></a></td>     
-                        <td>
-                            <!-- Confirmação antes de excluir -->
-                            <a href="#" onclick="confirmarExclusao('<%= produto.getCodigo()%>')">
-                                <span class="material-symbols-outlined">delete</span>
-                            </a>
-                        </td> 
-                    </tr>
-                    <%
-                            n_reg++;
-                        }
-                    %>
-                </table>
-
+                <div id="tabela-produtos-container" style="max-height: <%= alturaMaximaTabelaProdutos%>px; overflow-y: auto;">
+                    <table id="products-table" class="display dataTable" style="width:100%" border="2">
+                        <tr bgcolor="F3F3F3">
+                            <th>Código Interno</th>
+                            <th>Código EAN</th>
+                            <th>Descrição</th>
+                            <th>Preço</th>
+                            <th>Qtd Estoque</th>
+                            <th>Adicionar</th>
+                            <th>Excluir</th>
+                        </tr>
+                        <%
+                            int n_reg = 0;
+                            for (Produto produto : listaProdutos) {
+                        %>
+                        <tr>
+                            <td><%= produto.getCodigo()%></td>
+                            <td><%= produto.getCodigoean()%></td>
+                            <td><%= produto.getDescricao()%></td>
+                            <td><%= formatarDinheiro(produto.getPreco())%></td>
+                            <td><%= produto.getQtd_estoque()%></td>
+                            <td><a href=""><span class="material-symbols-outlined">update</span></a></td>     
+                            <td>
+                                <!-- Confirmação antes de excluir -->
+                                <a href="#" onclick="confirmarExclusao('<%= produto.getCodigo()%>')">
+                                    <span class="material-symbols-outlined">delete</span>
+                                </a>
+                            </td> 
+                        </tr>
+                        <%
+                                n_reg++;
+                            }
+                        %>
+                    </table>
+                </div>
                 <%
                 } else {
                 %>
@@ -917,6 +918,7 @@
                 <%
                     }
                 %>
+
                 <br><br><br><br><br>
             </div>
 

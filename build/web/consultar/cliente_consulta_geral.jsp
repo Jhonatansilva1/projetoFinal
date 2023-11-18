@@ -860,52 +860,54 @@
                     </div>
                 </div>
                 <br>
+                <label for="search">Buscar:</label>
+                <input type="text" id="search" oninput="buscarClientes()" placeholder="Nome / CPF ">
                 <%
                     ClienteDAO clienteDAO = new ClienteDAO();
                     List<Cliente> listaClientes = clienteDAO.consultarGeralCliente();
+                    int alturaMaximaTabela = 300; // Defina a altura máxima desejada em pixels
 
                     if (listaClientes != null && !listaClientes.isEmpty()) {
                 %>
-                <label for="search">Buscar:</label>
-                <input type="text" id="search" oninput="buscarClientes()" placeholder="Nome / CPF ">
-
-                <table id="clientes-table" class="display dataTable" style="width:100%" border="2">
-                    <tr bgcolor="F3F3F3">
-                        <th>Nome</th>
-                        <th>CPF</th>
-                        <th>RG</th>
-                        <th>Celular</th>
-                        <th>CEP</th>
-                        <th>Rua</th>
-                        <th>Número</th>
-                        <th>Bairro</th>
-                        <th>Cidade</th>
-                        <th>Excluir</th>
-                    </tr>
-                    <%
-                        for (Cliente cliente : listaClientes) {
-                    %>
-                    <tr>
-                        <td><%= cliente.getNome()%></td>
-                        <td><%= cliente.getCpf()%></td>
-                        <td><%= cliente.getRg()%></td>
-                        <td><%= cliente.getCelular()%></td>
-                        <td><%= cliente.getEnderecoCep()%></td>
-                        <td><%= cliente.getEnderecoRua()%></td>
-                        <td><%= cliente.getEnderecoNumero()%></td>
-                        <td><%= cliente.getEnderecoBairro()%></td>
-                        <td><%= cliente.getEnderecoCidade()%></td>
-                        <td>
-                            <!-- Confirmação antes de excluir -->
-                            <a href="#" onclick="confirmarExclusao('<%= cliente.getCpf()%>')">
-                                <span class="material-symbols-outlined">delete</span>
-                            </a>
-                        </td>
-                    </tr>
-                    <%
-                        }
-                    %>
-                </table>
+                <div id="tabela-container" style="max-height: <%= alturaMaximaTabela%>px; overflow-y: auto;">
+                    <table id="clientes-table" class="display dataTable" style="width:100%" border="2">
+                        <tr bgcolor="F3F3F3">
+                            <th>Nome</th>
+                            <th>CPF</th>
+                            <th>RG</th>
+                            <th>Celular</th>
+                            <th>CEP</th>
+                            <th>Rua</th>
+                            <th>Número</th>
+                            <th>Bairro</th>
+                            <th>Cidade</th>
+                            <th>Excluir</th>
+                        </tr>
+                        <%
+                            for (Cliente cliente : listaClientes) {
+                        %>
+                        <tr>
+                            <td><%= cliente.getNome()%></td>
+                            <td><%= cliente.getCpf()%></td>
+                            <td><%= cliente.getRg()%></td>
+                            <td><%= cliente.getCelular()%></td>
+                            <td><%= cliente.getEnderecoCep()%></td>
+                            <td><%= cliente.getEnderecoRua()%></td>
+                            <td><%= cliente.getEnderecoNumero()%></td>
+                            <td><%= cliente.getEnderecoBairro()%></td>
+                            <td><%= cliente.getEnderecoCidade()%></td>
+                            <td>
+                                <!-- Confirmação antes de excluir -->
+                                <a href="#" onclick="confirmarExclusao('<%= cliente.getCpf()%>')">
+                                    <span class="material-symbols-outlined">delete</span>
+                                </a>
+                            </td>
+                        </tr>
+                        <%
+                            }
+                        %>
+                    </table>
+                </div>
                 <%
                 } else {
                 %>
@@ -913,6 +915,7 @@
                 <%
                     }
                 %>
+
                 </body>
                 </html>
                 <br><br><br><br><br>
@@ -925,90 +928,90 @@
         <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
         <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
         <script>
-                                function buscarClientes() {
-                                    var searchTerm = $("#search").val().toLowerCase();
+                                    function buscarClientes() {
+                                        var searchTerm = $("#search").val().toLowerCase();
 
-                                    // Ocultar todas as linhas da tabela
-                                    $("#clientes-table tr").hide();
+                                        // Ocultar todas as linhas da tabela
+                                        $("#clientes-table tr").hide();
 
-                                    // Iterar sobre as linhas da tabela e exibir aquelas que correspondem ao termo de busca
-                                    $("#clientes-table tr").filter(function () {
-                                        return $(this).text().toLowerCase().indexOf(searchTerm) > -1;
-                                    }).show();
-                                }
-
-                                function confirmarExclusao(cpf) {
-                                    var confirmacao = confirm("Tem certeza que deseja excluir o cliente?");
-
-                                    if (confirmacao) {
-                                        window.location.href = "../excluir/cliente_excluir.jsp?cpf=" + cpf;
+                                        // Iterar sobre as linhas da tabela e exibir aquelas que correspondem ao termo de busca
+                                        $("#clientes-table tr").filter(function () {
+                                            return $(this).text().toLowerCase().indexOf(searchTerm) > -1;
+                                        }).show();
                                     }
-                                }
 
-                                $(document).ready(function () {
-                                    // Inicializar DataTable com configuração de paginação
-                                    $('#products-table').DataTable({
-                                        "language": {
-                                            "sEmptyTable": "Nenhum registro encontrado",
-                                            "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
-                                            "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
-                                            "sInfoFiltered": "(Filtrados de _MAX_ registros)",
-                                            "sInfoPostFix": "",
-                                            "sInfoThousands": ".",
-                                            "sLengthMenu": "_MENU_ resultados por página",
-                                            "sLoadingRecords": "Carregando...",
-                                            "sProcessing": "Processando...",
-                                            "sZeroRecords": "Nenhum registro encontrado",
-                                            "sSearch": "Pesquisar",
-                                            "oPaginate": {
-                                                "sNext": "Próximo",
-                                                "sPrevious": "Anterior",
-                                                "sFirst": "Primeiro",
-                                                "sLast": "Último"
-                                            },
-                                            "oAria": {
-                                                "sSortAscending": ": Ordenar colunas de forma ascendente",
-                                                "sSortDescending": ": Ordenar colunas de forma descendente"
-                                            },
-                                            "select": {
-                                                "rows": {
-                                                    "_": "Selecionado %d linhas",
-                                                    "0": "Nenhuma linha selecionada",
-                                                    "1": "Selecionado 1 linha"
+                                    function confirmarExclusao(cpf) {
+                                        var confirmacao = confirm("Tem certeza que deseja excluir o cliente?");
+
+                                        if (confirmacao) {
+                                            window.location.href = "../excluir/cliente_excluir.jsp?cpf=" + cpf;
+                                        }
+                                    }
+
+                                    $(document).ready(function () {
+                                        // Inicializar DataTable com configuração de paginação
+                                        $('#products-table').DataTable({
+                                            "language": {
+                                                "sEmptyTable": "Nenhum registro encontrado",
+                                                "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                                                "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                                                "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                                                "sInfoPostFix": "",
+                                                "sInfoThousands": ".",
+                                                "sLengthMenu": "_MENU_ resultados por página",
+                                                "sLoadingRecords": "Carregando...",
+                                                "sProcessing": "Processando...",
+                                                "sZeroRecords": "Nenhum registro encontrado",
+                                                "sSearch": "Pesquisar",
+                                                "oPaginate": {
+                                                    "sNext": "Próximo",
+                                                    "sPrevious": "Anterior",
+                                                    "sFirst": "Primeiro",
+                                                    "sLast": "Último"
+                                                },
+                                                "oAria": {
+                                                    "sSortAscending": ": Ordenar colunas de forma ascendente",
+                                                    "sSortDescending": ": Ordenar colunas de forma descendente"
+                                                },
+                                                "select": {
+                                                    "rows": {
+                                                        "_": "Selecionado %d linhas",
+                                                        "0": "Nenhuma linha selecionada",
+                                                        "1": "Selecionado 1 linha"
+                                                    }
                                                 }
-                                            }
-                                        },
-                                        "paging": true, // Ativar paginação
-                                        "pageLength": 5 // Definir a quantidade de registros por página
+                                            },
+                                            "paging": true, // Ativar paginação
+                                            "pageLength": 5 // Definir a quantidade de registros por página
+                                        });
+
                                     });
 
-                                });
+                                    $(document).ready(function () {
+                                        console.log("jQuery está funcionando.");
 
-                                $(document).ready(function () {
-                                    console.log("jQuery está funcionando.");
+                                        $(".xp-menubar").on('click', function () {
+                                            console.log("Clique no botão de menu.");
+                                            $("#sidebar").toggleClass('active');
+                                            $("#content").toggleClass('active');
+                                        });
 
-                                    $(".xp-menubar").on('click', function () {
-                                        console.log("Clique no botão de menu.");
-                                        $("#sidebar").toggleClass('active');
-                                        $("#content").toggleClass('active');
+                                        $('.xp-menubar,.body-overlay').on('click', function () {
+                                            console.log("Clique no botão de menu ou na sobreposição do corpo.");
+                                            $("#sidebar,.body-overlay").toggleClass('show-nav');
+                                        });
                                     });
 
-                                    $('.xp-menubar,.body-overlay').on('click', function () {
-                                        console.log("Clique no botão de menu ou na sobreposição do corpo.");
-                                        $("#sidebar,.body-overlay").toggleClass('show-nav');
+
+                                    document.getElementById("sair-link").addEventListener("click", function (event) {
+                                        event.preventDefault(); // Impede o comportamento padrão do link
+
+                                        const confirmacao = confirm("Deseja realmente sair?");
+
+                                        if (confirmacao) {
+                                            window.location.href = "index.html"; // Redireciona para index.html
+                                        }
                                     });
-                                });
-
-
-                                document.getElementById("sair-link").addEventListener("click", function (event) {
-                                    event.preventDefault(); // Impede o comportamento padrão do link
-
-                                    const confirmacao = confirm("Deseja realmente sair?");
-
-                                    if (confirmacao) {
-                                        window.location.href = "index.html"; // Redireciona para index.html
-                                    }
-                                });
         </script>
     </body>
 </html>

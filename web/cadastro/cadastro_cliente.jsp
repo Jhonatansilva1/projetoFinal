@@ -966,7 +966,77 @@
                     buscarLocalizacaoPorCEP();
                 }
             });
-            
+
+            $(document).ready(function () {
+                // Adiciona um ouvinte de evento de entrada ao campo de celular
+                $('#celular').on('input', function () {
+                    // Obtém o valor atual do campo de celular
+                    var numeroDigitado = $(this).val();
+
+                    // Remove caracteres não numéricos
+                    var numeroLimpo = numeroDigitado.replace(/\D/g, '');
+
+                    // Adiciona o DDD entre parênteses e o hífen
+                    var numeroFormatado = '(' + numeroLimpo.substr(0, 2) + ') ' + numeroLimpo.substr(2, 5) + '-' + numeroLimpo.substr(7, 4);
+
+                    // Atualiza o valor do campo de celular com o número formatado
+                    $(this).val(numeroFormatado);
+                });
+
+                // Adiciona um ouvinte de evento de entrada ao campo de CPF
+                $('#cpf').on('input', function () {
+                    // Obtém o valor atual do campo de CPF
+                    var cpfDigitado = $(this).val();
+
+                    // Remove caracteres não numéricos
+                    var cpfLimpo = cpfDigitado.replace(/\D/g, '');
+
+                    // Adiciona os pontos e o hífen no formato do CPF
+                    var cpfFormatado = cpfLimpo.substr(0, 3) + '.' + cpfLimpo.substr(3, 3) + '.' + cpfLimpo.substr(6, 3) + '-' + cpfLimpo.substr(9, 2);
+
+                    // Atualiza o valor do campo de CPF com o número formatado
+                    $(this).val(cpfFormatado);
+                });
+
+                // Adiciona um ouvinte de evento de entrada ao campo de RG
+                $('#rg').on('input', function () {
+                    // Obtém o valor atual do campo de RG
+                    var rgDigitado = $(this).val();
+
+                    // Remove caracteres não numéricos
+                    var rgLimpo = rgDigitado.replace(/\D/g, '');
+
+                    // Adiciona os pontos e o hífen no formato de RG
+                    var rgFormatado = rgLimpo.substr(0, 2) + '.' + rgLimpo.substr(2, 3) + '.' + rgLimpo.substr(5, 3) + '-' + rgLimpo.substr(8, 1);
+
+                    // Atualiza o valor do campo de RG com o número formatado
+                    $(this).val(rgFormatado);
+                });
+                
+                    // Adiciona um ouvinte de evento de entrada ao campo de telefone
+    $('#telefone').on('input', function() {
+        // Obtém o valor atual do campo de telefone
+        var telefoneDigitado = $(this).val();
+
+        // Remove caracteres não numéricos
+        var telefoneLimpo = telefoneDigitado.replace(/\D/g, '');
+
+        // Adiciona o DDD entre parênteses e o hífen para números com 9 dígitos
+        var telefoneFormatado;
+        if (telefoneLimpo.length === 11) {
+            telefoneFormatado = '(' + telefoneLimpo.substr(0, 2) + ') ' + telefoneLimpo.substr(2, 5) + '-' + telefoneLimpo.substr(7, 4);
+        } else if (telefoneLimpo.length === 10) {
+            telefoneFormatado = '(' + telefoneLimpo.substr(0, 2) + ') ' + telefoneLimpo.substr(2, 4) + '-' + telefoneLimpo.substr(6, 4);
+        } else {
+            // Se não for possível determinar o formato, usa o valor original
+            telefoneFormatado = telefoneDigitado;
+        }
+
+        // Atualiza o valor do campo de telefone com o número formatado
+        $(this).val(telefoneFormatado);
+    });
+            });
+
 
             function buscarLocalizacaoPorCEP() {
                 var cep = $('#cep').val();
