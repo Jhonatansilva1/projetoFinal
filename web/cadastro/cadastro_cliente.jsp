@@ -794,7 +794,9 @@
                             <i class="material-icons">groups3</i>Cliente
                         </a>
                         <ul class="collapse list-unstyled menu" id="homeSubmenu1">      
-                            <li><a href="../cadastro/cadastro_cliente.jsp"><i class="material-icons">person_add</i> Novo Cliente</a></li>
+                            <li><a href="cadastro/cadastro_cliente.jsp"><i class="material-icons">person_add</i> Novo Cliente</a></li>
+                            <li><a href="../alterar/index_alterar_cliente.jsp"><i class="material-icons">person_add</i> Alterar Cliente</a></li>
+                            <li><a href="../excluir/index_cliente_excluir.jsp"><i class="material-icons">person_remove</i> excluir Cliente</a></li>
                             <li><a href="../consultar/consulta_cliente_cpf.jsp"><i class="material-icons">search</i>Consultar [CPF]</a></li>
                             <li><a href="../consultar/cliente_consulta_geral.jsp"><i class="material-icons">search</i>Consulta Geral</a></li>
                         </ul>
@@ -806,7 +808,7 @@
                         </a>                   
                         <ul class="collapse list-unstyled menu" id="homeSubmenu3">
                             <li><a href="../abrir_pdv.jsp"><i class="material-icons">shopping_cart</i>Abrir PDV</a></li>
-                            <li><a href="../consultar/consulta_venda_periodo.jsp">Relátorio Caixa</a></li>
+                            <li><a href="../consultar/consulta_venda_periodo.jsp"><i class="material-icons">list_alt</i>Relátorio Caixa</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -865,7 +867,7 @@
                                 <input type="text" class="form-control" name="rg" id="rg" required>
                             </div>
 
-                            <!-- Campo CPF -->
+                            <!-- Campo CPF com função para validar 11 digitos-->
                             <div class="col-md-3">
                                 <label for="cpf" class="form-label">CPF:</label>
                                 <input type="text" class="form-control" name="cpf" id="cpf" required>
@@ -955,7 +957,7 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>
 
         <script type="text/javascript">
-        // Adicione um evento de entrada (input) ao campo de CEP
+            // Adicione um evento de entrada (input) ao campo de CEP
             $('#cep').on('input', function () {
                 // Verificar se o CEP tem 8 dígitos
                 var cep = $('#cep').val();
@@ -964,6 +966,7 @@
                     buscarLocalizacaoPorCEP();
                 }
             });
+            
 
             function buscarLocalizacaoPorCEP() {
                 var cep = $('#cep').val();

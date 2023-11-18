@@ -27,7 +27,6 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-
         <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
         <style>
             body,html{
@@ -812,7 +811,7 @@
                         <ul class="collapse list-unstyled menu" id="homeSubmenu1">      
                             <li><a href="../cadastro/cadastro_cliente.jsp"><i class="material-icons">person_add</i> Novo Cliente</a></li>
                             <li><a href="../alterar/alterar_cliente.jsp"><i class="material-icons">person_add</i> Alterar Cliente</a></li>
-                            <li><a href="../excluir/index_cliente_excluir.jsp"><i class="material-icons">person_add</i> excluir Cliente</a></li>
+                            <li><a href="../excluir/index_cliente_excluir.jsp"><i class="material-icons">person_remove</i> excluir Cliente</a></li>
                             <li><a href="consulta_cliente_cpf.jsp"><i class="material-icons">search</i>Consultar [CPF]</a></li>
                             <li><a href="cliente_consulta_geral.jsp"><i class="material-icons">search</i>Consulta Geral</a></li>
                         </ul>
@@ -824,7 +823,7 @@
                         </a>                   
                         <ul class="collapse list-unstyled menu" id="homeSubmenu3">
                             <li><a href="../abrir_pdv.jsp"><i class="material-icons">shopping_cart</i>Abrir PDV</a></li>
-                            <li><a href="consulta_venda_periodo.jsp">Relátorio Caixa</a></li>
+                            <li><a href="consulta_venda_periodo.jsp"><i class="material-icons">list_alt</i>Relátorio Caixa</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
