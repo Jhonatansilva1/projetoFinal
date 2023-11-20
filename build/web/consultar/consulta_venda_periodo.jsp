@@ -909,8 +909,8 @@
                                 VendasDAO vendaDAO = new VendasDAO();
                                 List<Vendas> vendasNoPeriodo = vendaDAO.consultarVendasPorPeriodo(dataInicial, dataFinal);
                     %>
-
-                    <table border="1">
+                    <br><br>
+                    <table align="center" border="1">
                         <thead>
                             <tr>
                                 <th>Data da Venda</th>
@@ -933,7 +933,7 @@
                             %>
                         </tbody>
                     </table>
-                    <p>Valor Total no Período: <%= formatarDinheiro(valorTotalPeriodo)%></p>
+                    <p align="center">Valor Total no Período: <%= formatarDinheiro(valorTotalPeriodo)%></p>
 
                     <%
                             } else {

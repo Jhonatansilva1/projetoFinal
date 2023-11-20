@@ -794,7 +794,7 @@
                             <i class="material-icons">groups3</i>Cliente
                         </a>
                         <ul class="collapse list-unstyled menu" id="homeSubmenu1">      
-                            <li><a href="cadastro/cadastro_cliente.jsp"><i class="material-icons">person_add</i> Novo Cliente</a></li>
+                            <li><a href="cadastro_cliente.jsp"><i class="material-icons">person_add</i> Novo Cliente</a></li>
                             <li><a href="../alterar/index_alterar_cliente.jsp"><i class="material-icons">person_add</i> Alterar Cliente</a></li>
                             <li><a href="../excluir/index_cliente_excluir.jsp"><i class="material-icons">person_remove</i> excluir Cliente</a></li>
                             <li><a href="../consultar/consulta_cliente_cpf.jsp"><i class="material-icons">search</i>Consultar [CPF]</a></li>
@@ -1012,31 +1012,7 @@
                     // Atualiza o valor do campo de RG com o número formatado
                     $(this).val(rgFormatado);
                 });
-                
-                    // Adiciona um ouvinte de evento de entrada ao campo de telefone
-    $('#telefone').on('input', function() {
-        // Obtém o valor atual do campo de telefone
-        var telefoneDigitado = $(this).val();
-
-        // Remove caracteres não numéricos
-        var telefoneLimpo = telefoneDigitado.replace(/\D/g, '');
-
-        // Adiciona o DDD entre parênteses e o hífen para números com 9 dígitos
-        var telefoneFormatado;
-        if (telefoneLimpo.length === 11) {
-            telefoneFormatado = '(' + telefoneLimpo.substr(0, 2) + ') ' + telefoneLimpo.substr(2, 5) + '-' + telefoneLimpo.substr(7, 4);
-        } else if (telefoneLimpo.length === 10) {
-            telefoneFormatado = '(' + telefoneLimpo.substr(0, 2) + ') ' + telefoneLimpo.substr(2, 4) + '-' + telefoneLimpo.substr(6, 4);
-        } else {
-            // Se não for possível determinar o formato, usa o valor original
-            telefoneFormatado = telefoneDigitado;
-        }
-
-        // Atualiza o valor do campo de telefone com o número formatado
-        $(this).val(telefoneFormatado);
-    });
             });
-
 
             function buscarLocalizacaoPorCEP() {
                 var cep = $('#cep').val();

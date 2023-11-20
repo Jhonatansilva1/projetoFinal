@@ -30,7 +30,7 @@ public class ClienteDAO {
                     + cliente.getEnderecoUf() + "')";
 
             stmt.executeUpdate(sql); // Insert, Delete ou Update            
-            System.out.println("Cliente Inserido!");
+            System.out.println("Cliente Inserido Ao Banco de Dados!");
             return true;
 
         } catch (ClassNotFoundException | SQLException ex) {
