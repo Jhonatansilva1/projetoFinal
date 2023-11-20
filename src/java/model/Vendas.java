@@ -13,6 +13,8 @@ public class Vendas {
     // Atributos
     private int id;
     private LocalDate data_venda;
+    private String formaPagamento;
+    private Double troco;
     private double valorTotal;
 
     // Construtor com parâmetros
@@ -34,6 +36,24 @@ public class Vendas {
     public void setId(int id) {
         this.id = id;
     }
+
+    public String getFormaPagamento() {
+        return formaPagamento;
+    }
+
+    public void setFormaPagamento(String formaPagamento) {
+        this.formaPagamento = formaPagamento;
+    }
+
+    public Double getTroco() {
+        return troco;
+    }
+
+    public void setTroco(Double troco) {
+        this.troco = troco;
+    }
+    
+    
 
     public LocalDate getDataVenda() {
         return this.data_venda;

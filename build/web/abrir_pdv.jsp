@@ -13,13 +13,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
         <title>PDV JBM</title>
+        <!-- Use o CDN do Google Fonts para Material Icons -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css">	
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
-
         <style>
             body,html{
                 line-height:1.8;
@@ -905,7 +905,6 @@
                                             </tr>
                                         </thead>
                                         <tbody id="tabelaDetalhes">
-                                            <!-- Linhas da tabela vão aqui -->
                                             <%
                                                 // Verifica se os detalhes da compra estão presentes
                                                 String[] descricoes = request.getParameterValues("descricaoDetalhe");
@@ -939,9 +938,7 @@
                                         </tbody>
                                     </table>
                                 </div>          
-
                             </div>
-
                             <div class="col-md-4 total-cupom">                        
                                 <label for="totalCupom">Total Cupom R$</label>
                                 <input type="text" class="form-control" id="totalCupom" name="totalCupom" readonly>
@@ -950,6 +947,50 @@
                             <div class="col-md-8">
                                 <button class="btn btn-primary" type="button" onclick="finalizarCompra()">Finalizar Compra</button>
                             </div>
+                            <!-- Modal Fechamento de Venda -->
+                            <div class="modal fade" id="modalFechamentoVenda" tabindex="-1" role="dialog" aria-labelledby="modalFechamentoVendaLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="modalFechamentoVendaLabel">Fechamento de Venda</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <!-- Conteúdo do modal aqui -->
+                                            <form id="formFechamentoVenda" action="cadastro/processar_vendas.jsp" method="post">
+                                                <div class="form-group">
+                                                    <label for="totalCupom">Valor Total a Pagar:</label>
+                                                    <input type="text" class="form-control" id="valorTotal" name="valorTotal" readonly>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="valorPago">Valor Pago:</label>
+                                                    <input type="text" class="form-control" id="valorPago" name="valorPago">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="formaPagamento">Forma de Pagamento:</label>
+                                                    <select class="form-control" id="formaPagamento" name="formaPagamento">
+                                                        <!-- Opções de forma de pagamento  -->
+                                                        <option value="Dinheiro">Dinheiro</option>
+                                                        <option value="Cartao Crédito">Cartão de Crédito</option>
+                                                        <option value="Cartao Débito">Cartão de Dédito</option>
+                                                        <option value="Pix">Pix</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="troco">Troco:</label>
+                                                    <input type="text" class="form-control" id="troco" name="troco" readonly>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                            <button id="btnConfirmarVenda type="button" class="btn btn-primary" onclick="confirmarVendaModal()">Confirmar Venda</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                     </form>
                     <br><br><br><br><br>
                     <footer class="footer">
@@ -957,172 +998,246 @@
                 </div>
             </div>
             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-            <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
             <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>
             <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
             <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
             <script type="text/javascript">
-                                // Variável para controlar a sequência
-                                var sequencia = <%= sequencia%>;
+                                                // Variável para controlar a sequência
+                                                var sequencia = <%= sequencia%>;
 
-                                function buscarProdutos() {
-                                    var descricao = $("#descricao").val();
+                                                function buscarProdutos() {
+                                                    var descricao = $("#descricao").val();
 
-                                    $.ajax({
-                                        type: "GET",
-                                        url: "consultar/produto_consulta_descricao.jsp",
-                                        data: {descricao: descricao},
-                                        success: function (result) {
-                                            $("#resultados").html(result);
-                                        },
-                                        error: function (error) {
-                                            console.log("Erro ao buscar produtos: " + error);
-                                        }
-                                    });
-                                }
+                                                    $.ajax({
+                                                        type: "GET",
+                                                        url: "consultar/produto_consulta_descricao.jsp",
+                                                        data: {descricao: descricao},
+                                                        success: function (result) {
+                                                            $("#resultados").html(result);
+                                                        },
+                                                        error: function (error) {
+                                                            console.log("Erro ao buscar produtos: " + error);
+                                                        }
+                                                    });
+                                                }
 
-                                function selecionarProduto(codigo, descricao, preco) {
-                                    // Preencher os campos com as informações do produto selecionado
-                                    $("#codigoProduto").val(codigo);
-                                    $("#descricao").val(descricao);
-                                    $("#precoUnitario").val(preco);
-                                    $("#valor").val(preco);
+                                                function selecionarProduto(codigo, descricao, preco) {
+                                                    // Preencher os campos com as informações do produto selecionado
+                                                    $("#codigoProduto").val(codigo);
+                                                    $("#descricao").val(descricao);
+                                                    $("#precoUnitario").val(preco);
+                                                    $("#valor").val(preco);
 
-                                    // Limpar a lista de resultados
-                                    $("#resultados").html("");
-                                }
+                                                    // Limpar a lista de resultados
+                                                    $("#resultados").html("");
+                                                }
 
-                                function calcularValor() {
-                                    var quantidade = $("#quantidade").val();
-                                    var precoUnitario = $("#precoUnitario").val();
+                                                function calcularValor() {
+                                                    var quantidade = $("#quantidade").val();
+                                                    var precoUnitario = $("#precoUnitario").val();
 
-                                    // Verificar se a quantidade e o preço unitário são válidos
-                                    if (quantidade && precoUnitario) {
-                                        var valor = parseFloat(quantidade) * parseFloat(precoUnitario);
-                                        $("#valor").val(valor.toFixed(2));
-                                    }
-                                }
+                                                    // Verificar se a quantidade e o preço unitário são válidos
+                                                    if (quantidade && precoUnitario) {
+                                                        var valor = parseFloat(quantidade) * parseFloat(precoUnitario);
+                                                        $("#valor").val(valor.toFixed(2));
+                                                    }
+                                                }
 
-                                function adicionarProduto() {
-                                    // Clicar adicionar produto adicionar a detalhes da compra
-                                    var descricao = $("#descricao").val();
-                                    var quantidade = $("#quantidade").val();
-                                    var precoUnitario = $("#precoUnitario").val();
-                                    var valor = $("#valor").val();
+                                                function adicionarProduto() {
+                                                    // Clicar adicionar produto adicionar a detalhes da compra
+                                                    var descricao = $("#descricao").val();
+                                                    var quantidade = $("#quantidade").val();
+                                                    var precoUnitario = $("#precoUnitario").val();
+                                                    var valor = $("#valor").val();
 
-                                    // Adicionar a linha na tabela de detalhes da compra
-                                    var novaLinha = "<tr><td>" + sequencia + "</td><td>" + descricao + "</td><td>" + quantidade + "</td><td>R$ " + precoUnitario + "</td><td>R$ " + valor + "</td><td><button class='btn btn-danger btn-sm' onclick='removerItem(this)'>Remover Item</button></td></tr>";
-                                    $("#tabelaDetalhes").append(novaLinha);
+                                                    // Adicionar a linha na tabela de detalhes da compra
+                                                    var novaLinha = "<tr><td>" + sequencia + "</td><td>" + descricao + "</td><td>" + quantidade + "</td><td>R$ " + precoUnitario + "</td><td>R$ " + valor + "</td><td><button class='btn btn-danger btn-sm' onclick='removerItem(this)'>Remover Item</button></td></tr>";
+                                                    $("#tabelaDetalhes").append(novaLinha);
 
-                                    // Limpar os campos
-                                    $("#descricao, #quantidade, #precoUnitario, #valor").val("");
+                                                    // Limpar os campos
+                                                    $("#descricao, #quantidade, #precoUnitario, #valor").val("");
 
-                                    // Após adicionar o produto, atualiza o total do cupom
-                                    atualizarTotalCupom();
+                                                    // Após adicionar o produto, atualiza o total do cupom
+                                                    atualizarTotalCupom();
 
-                                    // Incrementa a sequência
-                                    sequencia++;
-                                }
+                                                    // Incrementa a sequência
+                                                    sequencia++;
+                                                }
 
-                                function removerItem(botao) {
-                                    // Encontra o <tr> pai do botão clicado
-                                    var linhaRemover = $(botao).closest("tr");
+                                                function removerItem(botao) {
+                                                    // Encontra o <tr> pai do botão clicado
+                                                    var linhaRemover = $(botao).closest("tr");
 
-                                    // Obtém a sequência da linha a ser removida
-                                    var sequenciaRemover = parseInt(linhaRemover.find("td:eq(0)").text());
+                                                    // Obtém a sequência da linha a ser removida
+                                                    var sequenciaRemover = parseInt(linhaRemover.find("td:eq(0)").text());
 
-                                    // Remove a linha da tabela
-                                    linhaRemover.remove();
+                                                    // Remove a linha da tabela
+                                                    linhaRemover.remove();
 
-                                    // Atualiza as sequências dos itens seguintes
-                                    atualizarSequencias(sequenciaRemover);
+                                                    // Atualiza as sequências dos itens seguintes
+                                                    atualizarSequencias(sequenciaRemover);
 
-                                    // Após remover o produto, atualiza o total do cupom
-                                    atualizarTotalCupom();
-                                }
+                                                    // Após remover o produto, atualiza o total do cupom
+                                                    atualizarTotalCupom();
+                                                }
 
-                                function atualizarSequencias(sequenciaRemover) {
-                                    // Percorre cada linha da tabela a partir da linha removida
-                                    $("table#tabelaDetalhes tbody tr.sequenciavel").each(function () {
-                                        var sequenciaAtual = parseInt($(this).find("td:eq(0)").text());
+                                                function atualizarSequencias(sequenciaRemover) {
+                                                    // Percorre cada linha da tabela a partir da linha removida
+                                                    $("table#tabelaDetalhes tbody tr.sequenciavel").each(function () {
+                                                        var sequenciaAtual = parseInt($(this).find("td:eq(0)").text());
 
-                                        // Atualiza a sequência
-                                        if (sequenciaAtual > sequenciaRemover) {
-                                            $(this).find("td:eq(0)").text(sequenciaAtual - 1);
-                                        }
-                                    });
-                                }
+                                                        // Atualiza a sequência
+                                                        if (sequenciaAtual > sequenciaRemover) {
+                                                            $(this).find("td:eq(0)").text(sequenciaAtual - 1);
+                                                        }
+                                                    });
+                                                }
 
-                                function atualizarTotalCupom() {
-                                    var totalCupom = 0;
+                                                function atualizarTotalCupom() {
+                                                    var totalCupom = 0;
 
-                                    // Percorre cada linha da tabela de detalhes da compra
-                                    $("table tr:gt(0)").each(function () {
-                                        var quantidade = parseFloat($(this).find("td:eq(2)").text());
-                                        var precoUnitario = parseFloat($(this).find("td:eq(3)").text().replace("R$ ", ""));
-                                        var subtotal = quantidade * precoUnitario;
+                                                    // Percorre cada linha da tabela de detalhes da compra
+                                                    $("table tr:gt(0)").each(function () {
+                                                        var quantidade = parseFloat($(this).find("td:eq(2)").text());
+                                                        var precoUnitario = parseFloat($(this).find("td:eq(3)").text().replace("R$ ", ""));
+                                                        var subtotal = quantidade * precoUnitario;
 
-                                        // Adiciona o subtotal ao total do cupom
-                                        totalCupom += subtotal;
-                                    });
+                                                        // Adiciona o subtotal ao total do cupom
+                                                        totalCupom += subtotal;
+                                                    });
 
-                                    // Atualiza o valor no campo de total do cupom
-                                    $("#totalCupom").val(totalCupom.toFixed(2));
-                                }
+                                                    // Atualiza o valor no campo de total do cupom
+                                                    $("#totalCupom").val(totalCupom.toFixed(2));
+                                                }
 
-                                function finalizarCompra() {
-                                    var totalCupom = $("#totalCupom").val();
-                                    var codigoProduto = $("#codigoProduto").val();
+                                                function finalizarCompra() {
+                                                    // Lógica para calcular o valor total e atualizar o campo no modal
+                                                    var totalCupomAtual = parseFloat($("#totalCupom").val());
+                                                    var novoValorTotal = calcularValorTotal(totalCupomAtual);
+                                                    $('#valorTotal').val(novoValorTotal);
 
-                                    var confirmacao = confirm("Deseja realmente finalizar a compra?");
+                                                    // Abrir o modal
+                                                    $('#modalFechamentoVenda').modal('show');
+                                                }
 
-                                    if (confirmacao) {
-                                        $("<input>").attr({
-                                            type: "hidden",
-                                            id: "totalVenda",
-                                            name: "totalVenda",
-                                            value: totalCupom
-                                        }).appendTo("form");
+                                                // Associar a função ao evento de clique do botão "Confirmar Venda" no modal
+                                                $('#btnConfirmarVenda').on('click', function () {
+                                                    var totalCupom = $("#totalCupom").val();
+                                                    var codigoProduto = $("#codigoProduto").val();
 
-                                        // Inclui o código do produto no formulário
-                                        $("<input>").attr({
-                                            type: "hidden",
-                                            id: "codigoProduto",
-                                            name: "codigoProduto",
-                                            value: codigoProduto
-                                        }).appendTo("form");
+                                                    var confirmacao = confirm("Deseja realmente finalizar a compra?");
 
-                                        $("#acao").val("finalizarCompra");
-                                        document.forms["frmCadVenda"].submit();
-                                    }
-                                }
+                                                    if (confirmacao) {
+                                                        $("<input>").attr({
+                                                            type: "hidden",
+                                                            id: "totalVenda",
+                                                            name: "totalVenda",
+                                                            value: totalCupom
+                                                        }).appendTo("#formFechamentoVenda"); // Certifique-se de adicionar ao formulário correto
 
-                                $(document).ready(function () {
-                                    console.log("jQuery está funcionando.");
+                                                        $("<input>").attr({
+                                                            type: "hidden",
+                                                            id: "codigoProduto",
+                                                            name: "codigoProduto",
+                                                            value: codigoProduto
+                                                        }).appendTo("#formFechamentoVenda");
 
-                                    $(".xp-menubar").on('click', function () {
-                                        console.log("Clique no botão de menu.");
-                                        $("#sidebar").toggleClass('active');
-                                        $("#content").toggleClass('active');
-                                    });
+                                                        $("#acao").val("finalizarCompra");
+                                                        $("#formFechamentoVenda").submit(); // Use $("#formFechamentoVenda").submit() em vez de document.forms["frmCadVenda"].submit();
+                                                    }
+                                                });
+                                                
+                                                $('#valorPago').on('input', function () {
+                                                    // Obtém os valores do total e do valor pago
+                                                    var totalCupom = parseFloat($("#totalCupom").val());
+                                                    var valorPago = parseFloat($(this).val());
 
-                                    $('.xp-menubar,.body-overlay').on('click', function () {
-                                        console.log("Clique no botão de menu ou na sobreposição do corpo.");
-                                        $("#sidebar,.body-overlay").toggleClass('show-nav');
-                                    });
-                                });
+                                                    // Verifica se os valores são válidos
+                                                    if (!isNaN(totalCupom) && !isNaN(valorPago)) {
+                                                        // Calcula o troco
+                                                        var troco = valorPago - totalCupom;
+
+                                                        // Atualiza o campo de troco
+                                                        $('#troco').val(troco.toFixed(2));
+                                                    }
+                                                });
+
+                                                function confirmarVendaModal() {
+                                                    // Recuperar os valores necessários do modal
+                                                    var valorTotal = parseFloat($('#valorTotal').val());
+                                                    var valorPago = parseFloat($('#valorPago').val());
+                                                    var formaPagamento = $('#formaPagamento').val();
+
+                                                    // Calcular o troco
+                                                    var troco = valorPago - valorTotal;
+
+                                                    // Criar elementos input ocultos e adicioná-los ao formulário
+                                                    $("<input>").attr({
+                                                        type: "hidden",
+                                                        id: "valorTotal",
+                                                        name: "valorTotal",
+                                                        value: valorTotal
+                                                    }).appendTo("#formFechamentoVenda");
+
+                                                    $("<input>").attr({
+                                                        type: "hidden",
+                                                        id: "valorPago",
+                                                        name: "valorPago",
+                                                        value: valorPago
+                                                    }).appendTo("#formFechamentoVenda");
+
+                                                    $("<input>").attr({
+                                                        type: "hidden",
+                                                        id: "formaPagamento",
+                                                        name: "formaPagamento",
+                                                        value: formaPagamento
+                                                    }).appendTo("#formFechamentoVenda");
+
+                                                    $("<input>").attr({
+                                                        type: "hidden",
+                                                        id: "troco",
+                                                        name: "troco",
+                                                        value: troco
+                                                    }).appendTo("#formFechamentoVenda");
+
+                                                    // Enviar o formulário
+                                                    $('#formFechamentoVenda').submit();
+                                                }
 
 
-                                document.getElementById("sair-link").addEventListener("click", function (event) {
-                                    event.preventDefault(); // Impede o comportamento padrão do link
+                                                function calcularValorTotal() {
+                                                    var totalCupom = parseFloat($("#totalCupom").val());
 
-                                    const confirmacao = confirm("Deseja realmente sair?");
+                                                    var novoValorTotal = totalCupom;
 
-                                    if (confirmacao) {
-                                        window.location.href = "index.html"; // Redireciona para index.html
-                                    }
-                                });
+                                                    return novoValorTotal; // Substitua com a lógica real
+                                                }
+
+                                                $(document).ready(function () {
+                                                    console.log("jQuery está funcionando.");
+
+                                                    $(".xp-menubar").on('click', function () {
+                                                        console.log("Clique no botão de menu.");
+                                                        $("#sidebar").toggleClass('active');
+                                                        $("#content").toggleClass('active');
+                                                    });
+
+                                                    $('.xp-menubar,.body-overlay').on('click', function () {
+                                                        console.log("Clique no botão de menu ou na sobreposição do corpo.");
+                                                        $("#sidebar,.body-overlay").toggleClass('show-nav');
+                                                    });
+                                                });
+
+
+                                                document.getElementById("sair-link").addEventListener("click", function (event) {
+                                                    event.preventDefault(); // Impede o comportamento padrão do link
+
+                                                    const confirmacao = confirm("Deseja realmente sair?");
+
+                                                    if (confirmacao) {
+                                                        window.location.href = "index.html"; // Redireciona para index.html
+                                                    }
+                                                });
             </script>
     </body>
 </html>

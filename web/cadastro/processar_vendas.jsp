@@ -21,19 +21,23 @@
         <%
             if ("POST".equals(request.getMethod())) {
                 // Recupera os parâmetros do formulário
-                String totalVenda = request.getParameter("totalVenda");
+                String totalCupom = request.getParameter("totalCupom");
                 String codigoProduto = request.getParameter("codigoProduto");
                 String quantidadeString = request.getParameter("quantidade");
+                String formaPagamento = request.getParameter("formaPagamento");
+                String trocoString = request.getParameter("troco");
 
-                // Converte a quantidade para um valor numérico (int), ou assume 0 se for nula ou vazia
+                // Converte a quantidade e troco para valores numéricos (int), assume 0 se for nula ou vazia
                 int quantidade = (quantidadeString != null && !quantidadeString.isEmpty()) ? Integer.parseInt(quantidadeString) : 0;
+                double troco = (trocoString != null && !trocoString.isEmpty()) ? Double.parseDouble(trocoString) : 0.0;
 
                 // Calcula a data atual
                 String dataVenda = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 
                 // Chama o método do VendasDAO para adicionar a venda
                 VendasDAO vendasDAO = new VendasDAO();
-                int idVenda = vendasDAO.adicionarVenda(dataVenda, Double.parseDouble(totalVenda));
+                double totalVendaValue = totalCupom != null ? Double.parseDouble(totalCupom) : 0.0;
+                int idVenda = vendasDAO.adicionarVenda(dataVenda, Double.parseDouble(totalCupom), formaPagamento, troco);
 
                 // Cria uma instância de ProdutoDAO
                 ProdutoDAO produtoDAO = new ProdutoDAO();
@@ -46,16 +50,5 @@
             }
         %>
 
-        <%
-            String acao = request.getParameter("acao");
-
-            if ("finalizarCompra".equals(acao)) {
-        %>
-        <script>
-            alert("Compra finalizada com sucesso!");
-        </script>
-        <%
-            }
-        %>
     </body>
 </html>

@@ -832,8 +832,8 @@
                             <i class="material-icons">inventory</i>Mercadoria
                         </a>
                         <ul class="collapse list-unstyled menu" id="homeSubmenu4">
-                            <li><a href="#"><i class="material-icons">add</i>Cadastrar Mercadoria</a></li>
-                            <li><a href="#"><i class="material-icons">search</i>Consultar Estoque</a></li>
+                            <li><a href="../cadastro/cadastro_produto.jsp"><i class="material-icons">add</i>Cadastrar Mercadoria</a></li>
+                            <li><a href="produto_consulta_geral.jsp"><i class="material-icons">search</i>Consultar Estoque</a></li>
                         </ul>
                     </li>
                     <li class="">

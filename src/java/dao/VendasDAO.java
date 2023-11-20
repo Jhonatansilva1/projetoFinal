@@ -20,8 +20,8 @@ import model.Vendas;
  */
 public class VendasDAO {
 
-    // Método para adicionar uma venda ao banco de dados
-    public int adicionarVenda(String dataVenda, double totalVenda) {
+// Método para adicionar uma venda ao banco de dados
+    public int adicionarVenda(String dataVenda, double totalCupom, String formaPagamento, double troco) {
         Connection conexao = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -29,10 +29,12 @@ public class VendasDAO {
 
         try {
             conexao = ConectaDB.conectar();
-            String sql = "INSERT INTO vendas (data_venda, total_venda) VALUES (?, ?)";
+            String sql = "INSERT INTO vendas (data_venda, total_venda, formaPagamento, troco) VALUES (?, ?, ?, ?)";
             ps = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, dataVenda);
-            ps.setDouble(2, totalVenda);
+            ps.setDouble(2, totalCupom);
+            ps.setString(3, formaPagamento);
+            ps.setDouble(4, troco);
 
             // Execute a atualização do banco de dados
             ps.executeUpdate();
